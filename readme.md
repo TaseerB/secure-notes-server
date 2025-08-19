@@ -30,3 +30,7 @@ A FastAPI project for managing secure notes.
 
 ```bash
 uvicorn main:app
+
+
+```devenv
+fastapi dev main.py

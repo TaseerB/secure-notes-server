@@ -1,15 +1,17 @@
 from pydantic import BaseModel
+from typing import Optional
 
-
-class UserCreate(BaseModel):
+class UserBase(BaseModel):
     name: str
     email: str
+    is_active: Optional[bool] = True
+
+class UserCreate(UserBase):
     password: str
-    is_active: bool = True
 
-
-class UserRead(UserCreate):
+class UserRead(UserBase):
     id: int
-
+    # Note: password is excluded from read model for security
+    
     class Config:
-        orm_mode = True
+        from_attributes = True
