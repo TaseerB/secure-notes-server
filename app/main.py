@@ -1,10 +1,10 @@
 from typing import Union
 
 from fastapi import FastAPI
-from app.routers import users
+from app.routers import user
+from app.routers import task
 
 app = FastAPI()
-
 
 @app.get("/")
 def read_root():
@@ -15,5 +15,5 @@ def read_root():
 # def read_item(item_id: int, q: Union[str, None] = None):
 #     return {"item_id": item_id, "q": q}
 
-
-app.include_router(users.router)
+app.include_router(user.router)
+app.include_router(task.router)
