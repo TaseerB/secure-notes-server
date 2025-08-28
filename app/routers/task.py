@@ -28,7 +28,7 @@ async def get_task_endpoint(task_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.get("/", response_model=List[TaskRead])
 async def list_tasks_endpoint(
-    user_id: Optional[int] = None,
+    user_id: int,  # Changed from Optional[int] to required
     skip: int = 0,
     limit: int = 100,
     db: AsyncSession = Depends(get_db),
