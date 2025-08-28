@@ -1,5 +1,23 @@
-    # Python virtual environment
-    venv/
-    .venv/
-    __pycache__
-    *.pyc
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Ensure all __pycache__ under app/ are ignored
+app/**/__pycache__/
+app/**/*.pyc
+
+# FastAPI generated files
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
