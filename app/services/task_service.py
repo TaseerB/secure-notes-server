@@ -9,11 +9,15 @@ from fastapi import HTTPException, status
 from app.models.task import Task
 from app.schemas.task import TaskCreate, TaskUpdate
 
+from app.utilities.create_utility import schema_to_dict
+
+
 logger = logging.getLogger(__name__)
 
 
 async def create_task(db: AsyncSession, payload: TaskCreate) -> Task:
-    data = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+    data = schema_to_dict(payload)
+
     task = Task(**data)
     try:
         db.add(task)

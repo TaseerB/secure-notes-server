@@ -1,5 +1,5 @@
 import logging
-from typing import List, Any, Dict
+from typing import List
 
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
@@ -7,26 +7,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user import User
 from app.schemas.user import UserCreate
+from app.utilities.create_utility import schema_to_dict
 from app.utilities.password_utility import hash_password  # ensure this exists
 
 logger = logging.getLogger(__name__)
-
-
-def _schema_to_dict(schema_obj: Any) -> Dict[str, Any]:
-    """
-    Support both Pydantic v1 (dict()) and v2 (model_dump()).
-    """
-    if hasattr(schema_obj, "model_dump"):
-        return schema_obj.model_dump()
-    return schema_obj.dict()
-
 
 async def create_user(db: AsyncSession, user: UserCreate) -> User:
     """
     Create a new user; hashes password, commits, refreshes, returns instance.
     Raises IntegrityError upward for router to translate, or re-raises other DB errors.
     """
-    data = _schema_to_dict(user)
+    data = schema_to_dict(user)
     # Ensure password is hashed here (centralized)
     data["password"] = hash_password(data["password"])
 
