@@ -6,9 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.schemas.task import TaskCreate, TaskRead, TaskUpdate
 from app.services.task_service import (
-    create_task,
     get_task,
-    list_tasks,
     update_task,
     delete_task,
 )
@@ -16,24 +14,23 @@ from app.services.task_service import (
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
-@router.post("/", response_model=TaskRead, status_code=status.HTTP_201_CREATED)
-async def create_task_endpoint(payload: TaskCreate, db: AsyncSession = Depends(get_db)):
-    return await create_task(db, payload)
+# @router.post("/", response_model=TaskRead, status_code=status.HTTP_201_CREATED)
+# async def create_task_endpoint(payload: TaskCreate, db: AsyncSession = Depends(get_db)):
+#     return await create_task(db, payload)
+
+# @router.get("/", response_model=List[TaskRead])
+# async def list_tasks_endpoint(
+#     user_id: int,  # Changed from Optional[int] to required
+#     skip: int = 0,
+#     limit: int = 100,
+#     db: AsyncSession = Depends(get_db),
+# ):
+#     return await list_tasks(db, user_id=user_id, skip=skip, limit=limit)
 
 
 @router.get("/{task_id}", response_model=TaskRead)
 async def get_task_endpoint(task_id: int, db: AsyncSession = Depends(get_db)):
     return await get_task(db, task_id)
-
-
-@router.get("/", response_model=List[TaskRead])
-async def list_tasks_endpoint(
-    user_id: int,  # Changed from Optional[int] to required
-    skip: int = 0,
-    limit: int = 100,
-    db: AsyncSession = Depends(get_db),
-):
-    return await list_tasks(db, user_id=user_id, skip=skip, limit=limit)
 
 
 @router.put("/{task_id}", response_model=TaskRead)

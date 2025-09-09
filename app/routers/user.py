@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from app.schemas.task import TaskCreate, TaskRead
 from app.schemas.user import UserCreate, UserRead
+from app.services.task_service import create_task, list_tasks
 from app.services.user_service import create_user, get_users
 from app.db.session import get_db
 from app.utilities.password_utility import hash_password
@@ -59,4 +61,30 @@ async def read_all(db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while fetching users"
+        )
+
+# ----------------------------
+# Create and get Task per User
+# ----------------------------
+@router.get("/{user_id}/tasks", response_model=List[TaskRead])
+async def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
+    try:
+        return await list_tasks(db, user_id=user_id)
+    except Exception as e:
+        logger.error(f"Error fetching tasks for user {user_id}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while fetching tasks"
+        )
+    
+
+@router.post("/{user_id}/tasks", response_model=TaskRead, status_code=status.HTTP_201_CREATED)
+async def create_user_task(user_id: int, task: TaskCreate, db: Session = Depends(get_db)):
+    try:
+        return await create_task(db, task, user_id=user_id)
+    except Exception as e:
+        logger.error(f"Error creating task for user {user_id}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while creating the task"
         )

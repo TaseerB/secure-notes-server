@@ -21,7 +21,8 @@ class TaskBase(BaseModel):
 
 
 class TaskCreate(TaskBase):
-    user_id: int
+    # user_id will be provided as a path parameter in your endpoint, not in the request body
+    pass
 
 
 class TaskUpdate(BaseModel):

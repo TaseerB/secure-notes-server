@@ -13,7 +13,7 @@ config = context.config
 
 # Configure Python logging
 if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 
 # Ensure project root is on sys.path (so imports work)
 PROJECT_ROOT = Path(__file__).resolve().parents[1]

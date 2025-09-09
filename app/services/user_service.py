@@ -50,7 +50,7 @@ async def get_users(db: AsyncSession) -> List[User]:
     try:
         result = await db.execute(select(User))
         users = result.scalars().all()
-        logger.debug("Fetched %d users", len(users))
+        logger.info("Fetched %d users", len(users))
         return users
     except SQLAlchemyError as e:
         logger.error("Database error fetching users: %s", str(e))

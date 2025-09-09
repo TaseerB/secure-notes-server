@@ -43,7 +43,6 @@ async def get_task(db: AsyncSession, task_id: int) -> Task:
 async def list_tasks(
     db: AsyncSession, user_id: Optional[int] = None, skip: int = 0, limit: int = 100
 ) -> List[Task]:
-    stmt = select(Task).order_by(Task.id).offset(skip).limit(limit)
     if user_id is not None:
         stmt = select(Task).where(Task.user_id == user_id).order_by(Task.id).offset(skip).limit(limit)
     try:
